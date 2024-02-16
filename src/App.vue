@@ -2,7 +2,6 @@
 import AppHeader from './components/AppHeader.vue';
 import AppFooter from './components/AppFooter.vue';
 import ProjectCard from './components/ProjectCard.vue';
-import AppMain from './components/AppMain.vue';
 import axios from 'axios';
 export default {
 
@@ -16,29 +15,16 @@ export default {
         }
     },
     components: {
-        AppMain,
         AppHeader,
         AppFooter,
-        ProjectCard
     },
-    methods: {
-        getProjects() {
-            axios.get(this.RootUrl + this.ListUrl.projects)
-                .then((response) => {
-                    console.log(response);
-                    this.projects = response.data.results;
-                }).catch(error => { console.log(error) });
-        }
-    },
-    created() {
-        this.getProjects();
-    }
-
 }
+
+
 </script>
 <template>
     <AppHeader />
-    <!--<ProjectCard :projects="projects" />-->
     <RouterView />
+    <AppFooter />
 </template>
 <style scoped></style>
