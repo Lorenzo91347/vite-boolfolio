@@ -4,6 +4,12 @@ export default {
 }
 </script>
 <template>
-    <div>Fine</div>
+    <h1 class="text center">Fine</h1>
 </template>
-<style scoped></style>
+<style scoped>
+div {
+    height: 120px;
+    background-color: black;
+    color: white;
+}
+</style>

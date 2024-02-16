@@ -38,6 +38,7 @@ export default {
 </script>
 <template>
     <AppHeader />
-    <ProjectCard :projects="projects" />
+    <!--<ProjectCard :projects="projects" />-->
+    <RouterView />
 </template>
 <style scoped></style>
