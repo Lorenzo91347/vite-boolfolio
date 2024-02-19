@@ -31,10 +31,14 @@ export default {
                 },
             })
                 .then((response) => {
+                    if (response.data.results) {
+                        this.responseData = response.data
+                        // this.projects = response.data.results
+                        console.log(this.responseData);
+                    } else {
+                        this.$router.push({ name: 'NotFound' });
+                    }
 
-                    this.responseData = response.data
-                    // this.projects = response.data.results
-                    console.log(this.responseData);
                 })
                 .catch((error) => {
                     console.log(error)
@@ -63,13 +67,16 @@ export default {
 
 
     created() {
-        this.$watch(
-            () => this.$route.params,
-            (toParams, previousParams) => {
-                console.log(this.$route);
-                this.currentPage = this.$route.query?.page ?? 1;
-            }
-        )
+
+        //This watch() shows to the user the page he is on,so it can be used as a link
+
+        //this.$watch(
+        //() => this.$route.params,
+        //(toParams, previousParams) => {
+        //console.log(this.$route);
+        //this.currentPage = this.$route.query?.page ?? 1;
+        //}
+        // )
         this.getProjects();
     },
 }
