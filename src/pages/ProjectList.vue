@@ -1,33 +1,35 @@
 <script>
 import Loading from '../pages/Loading.vue';
 import ProjectCard from '../components/ProjectCard.vue';
+import ProjectSearch from '../components/ProjectSearch.vue';
 import axios from 'axios';
+import store from '../store';
 
 
 export default {
     name: 'ProjectList',
     data() {
         return {
+            store,
             loading: false,
             currentPage: 1,
             responseData: {},
             projects: [],
-            RootUrl: 'http://127.0.0.1:8000',
-            ListUrl: {
-                projects: '/api/projects'
-            }
         }
     },
     components: {
         ProjectCard,
-        Loading
+        Loading,
+        ProjectSearch
     },
     methods: {
         getProjects() {
+            this.error = null;
             this.loading = true;
-            axios.get(this.RootUrl + this.ListUrl.projects, {
+            axios.get(this.store.api.RootUrl + this.store.api.ListUrl.projects, {
                 params: {
                     page: this.currentPage,
+                    key: this.store.projects.searchKey,
                 },
             })
                 .then((response) => {
@@ -42,6 +44,8 @@ export default {
                 })
                 .catch((error) => {
                     console.log(error)
+                    this.responseData.results.data = [];
+                    this.error = error.response.data.errors;
                 })
                 .finally(() => {
                     this.loading = false
@@ -50,7 +54,10 @@ export default {
             this.currentPage++;
             this.$router.push({
                 name: 'projects',
-                query: { page: this.currentPage }
+                query: {
+                    page: this.currentPage,
+                    key: this.store.projects.searchKey
+                }
             });
             this.getProjects()
         },
@@ -58,7 +65,10 @@ export default {
             this.currentPage--;
             this.$router.push({
                 name: 'projects',
-                query: { page: this.currentPage }
+                query: {
+                    page: this.currentPage,
+                    key: this.store.projects.searchKey
+                }
             });
             this.getProjects()
 
@@ -67,6 +77,8 @@ export default {
 
 
     created() {
+        this.store.projects.currentPage = this.$route.query.page ?? 1;
+        this.store.projects.searchKey = this.$route.query.key ?? null;
 
         //This watch() shows to the user the page he is on,so it can be used as a link
 
@@ -84,6 +96,7 @@ export default {
 <template>
     <div class="container">
         <h2>The projects</h2>
+        <ProjectSearch @search-project="getProjects" />
         <Loading v-if="loading" />
         <div class="row mt-4" v-else>
             <div class="col col-md-4" v-for="project in responseData.results.data">
@@ -97,6 +110,5 @@ export default {
                 </ul>
             </nav>
         </div>
-    </div>
-</template>
+</div></template>
 <style></style>
