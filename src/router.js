@@ -22,6 +22,7 @@ const router = createRouter({
             component: ProjectList
         },
         {
+            //Here :slug can be any name,as long as it is reciprocated in the axios call
             path: '/project/:slug',
             name: 'single-project',
             component: ProjectDetail
