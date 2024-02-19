@@ -23,8 +23,7 @@ export default {
         getProject() {
             axios.get(this.RootUrl + this.ListUrl.projects + '/' + this.$route.params.slug)
                 .then((response) => {
-                    console.log(response);
-                    this.project = response.data.results;
+                    this.project = response.data;
                     console.log(this.project);
                 }).catch(error => {
                     console.log(error);
@@ -41,7 +40,11 @@ export default {
 </script>
 <template>
     <div class="container py-4">
-        <h1>{{ project.title }}</h1>
-        <p>{{ project.content }}</p>
+        <h1>{{ this.project.title }}</h1>
+        <p>{{ this.project.content }}</p>
+        <ul v-for="tech in project.technologies">
+            <li>{{ tech.title }}</li>
+        </ul>
+
     </div>
 </template>

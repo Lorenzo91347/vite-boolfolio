@@ -42,24 +42,35 @@ export default {
                 .finally(() => {
                     this.loading = false
                 })
-        }
-    },
+        }, nextPage() {
+            this.currentPage++;
+            this.$router.push({
+                name: 'projects',
+                query: { page: this.currentPage }
+            });
+            this.getProjects()
+        },
+        prevPage() {
+            this.currentPage--;
+            this.$router.push({
+                name: 'projects',
+                query: { page: this.currentPage }
+            });
+            this.getProjects()
 
-    nextPage() {
-        this.currentPage++;
-        console.log('next');
-        this.getProjects()
-    },
-    prevPage() {
-        this.currentPage--;
-        this.getProjects()
-
+        },
     },
 
 
     created() {
+        this.$watch(
+            () => this.$route.params,
+            (toParams, previousParams) => {
+                console.log(this.$route);
+                this.currentPage = this.$route.query?.page ?? 1;
+            }
+        )
         this.getProjects();
-
     },
 }
 </script>
