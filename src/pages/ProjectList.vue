@@ -1,5 +1,5 @@
 <script>
-import Loading from '../components/Loading.vue';
+import Loading from '../pages/Loading.vue';
 import ProjectCard from '../components/ProjectCard.vue';
 import axios from 'axios';
 
@@ -31,9 +31,10 @@ export default {
                 },
             })
                 .then((response) => {
-                    console.log(response);
+
                     this.responseData = response.data
                     // this.projects = response.data.results
+                    console.log(this.responseData);
                 })
                 .catch((error) => {
                     console.log(error)
@@ -46,6 +47,7 @@ export default {
 
     nextPage() {
         this.currentPage++;
+        console.log('next');
         this.getProjects()
     },
     prevPage() {
@@ -68,14 +70,14 @@ export default {
         <div class="row mt-4" v-else>
             <div class="col col-md-4" v-for="project in responseData.results.data">
                 <ProjectCard :project="project" />
-                <nav class="my-5">
-                    <ul class="d-flex justify-content-between list-unstyled">
-                        <li class="btn btn-success" @click="prevPage" v-show="responseData.results?.prev_page_url">Previous
-                        </li>
-                        <li class="btn btn-danger" @click="nextPage" v-show="responseData.results?.next_page_url">Next</li>
-                    </ul>
-                </nav>
             </div>
+            <nav class="my-5">
+                <ul class="d-flex justify-content-between list-unstyled">
+                    <li class="btn btn-success" @click="prevPage" v-show="responseData.results?.prev_page_url">Previous
+                    </li>
+                    <li class="btn btn-danger" @click="nextPage" v-show="responseData.results?.next_page_url">Next</li>
+                </ul>
+            </nav>
         </div>
     </div>
 </template>
