@@ -54,6 +54,8 @@ export default {
         <div>{{ this.project.type.title }}</div>
         <img v-if="project.post_image" :src="this.store.api.RootUrl + this.store.api.storagePath + project.post_image"
             :alt="project.title">
+        <button class="btn btn-primary"><router-link
+                :to="{ name: 'projects', query: { key: store.projects.searchKey } }">Back to projects</router-link></button>
 
     </div>
 </template>

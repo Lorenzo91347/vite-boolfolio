@@ -12,7 +12,7 @@ export default {
         return {
             store,
             loading: false,
-            currentPage: 1,
+
             responseData: {},
             projects: [],
         }
@@ -28,7 +28,7 @@ export default {
             this.loading = true;
             axios.get(this.store.api.RootUrl + this.store.api.ListUrl.projects, {
                 params: {
-                    page: this.currentPage,
+                    page: this.store.projects.currentPage,
                     key: this.store.projects.searchKey,
                 },
             })
@@ -50,12 +50,16 @@ export default {
                 .finally(() => {
                     this.loading = false
                 })
-        }, nextPage() {
+        },
+
+        //Adding the key: searchKey parameter allows the functions below to keep the results of the search even when passing to another pseudo-page
+
+        nextPage() {
             this.currentPage++;
             this.$router.push({
                 name: 'projects',
                 query: {
-                    page: this.currentPage,
+                    page: this.store.projects.currentPage,
                     key: this.store.projects.searchKey
                 }
             });
@@ -66,7 +70,7 @@ export default {
             this.$router.push({
                 name: 'projects',
                 query: {
-                    page: this.currentPage,
+                    page: this.store.projects.currentPage,
                     key: this.store.projects.searchKey
                 }
             });
@@ -82,13 +86,14 @@ export default {
 
         //This watch() shows to the user the page he is on,so it can be used as a link
 
-        //this.$watch(
-        //() => this.$route.params,
-        //(toParams, previousParams) => {
-        //console.log(this.$route);
-        //this.currentPage = this.$route.query?.page ?? 1;
-        //}
-        // )
+        this.$watch(
+            () => this.$route.params,
+            (toParams, previousParams) => {
+                this.store.projects.currentPage = this.$route.query.page ?? 1;
+                this.store.projects.searchKey = this.$route.query.key ?? null;
+                this.getProjects();
+            }
+        );
         this.getProjects();
     },
 }
@@ -110,5 +115,6 @@ export default {
                 </ul>
             </nav>
         </div>
-</div></template>
+    </div>
+</template>
 <style></style>
